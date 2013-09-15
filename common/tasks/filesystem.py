@@ -142,7 +142,7 @@ class FStab(Task):
 				mount_opts.append('nobarrier')
 			fstab_lines.append('UUID={uuid} {mountpoint} {filesystem} {mount_opts} 1 1'
 			                   .format(uuid=partition.get_uuid(),
-			                   	       mountpoint=mount_point,
+			                           mountpoint=mount_point,
 			                           filesystem=partition.filesystem,
 			                           mount_opts=','.join(mount_opts)))
 
