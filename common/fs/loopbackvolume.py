@@ -25,7 +25,7 @@ class LoopbackVolume(Volume):
 
 	extension = 'raw'
 
-	def __init__(self, partition_map, callbacks={}):
+	def __init__(self, partition_map, events=[], callbacks={}):
 		callbacks.update({'onbeforecreate': self._create,
 		                  'onbeforeattach': self._attach,
 		                  'onbeforedetach': self._detach,
@@ -33,8 +33,8 @@ class LoopbackVolume(Volume):
 		                  'onbeforelink_dm_node': self._link_dm_node,
 		                  'onbeforeunlink_dm_node': self._unlink_dm_node,
 		                  })
-		self.events.extend(self.link_dm_events)
-		super(LoopbackVolume, self).__init__(partition_map, callbacks=callbacks)
+		events += self.link_dm_events
+		super(LoopbackVolume, self).__init__(partition_map, events, callbacks=callbacks)
 
 	def create(self, image_path):
 		self.fsm.create(image_path=image_path)
