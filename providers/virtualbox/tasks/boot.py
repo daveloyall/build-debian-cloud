@@ -30,9 +30,9 @@ class ConfigureGrub(Task):
 				p_map.boot.unmount()
 			p_map.root.unmount()
 			if not isinstance(p_map, NoPartitions):
-				p_map.unmap()
+				p_map.unmap(info.volume)
 				fn()
-				p_map.map()
+				p_map.map(info.volume)
 			else:
 				fn()
 				p_map.root.device_path = info.volume.device_path
