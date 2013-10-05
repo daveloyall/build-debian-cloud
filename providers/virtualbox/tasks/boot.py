@@ -70,4 +70,4 @@ class ConfigureGrub(Task):
 			raise e
 
 		if isinstance(info.volume, LoopbackVolume):
-			remount(info.volume, info.volume.unlink_dm_node)
+			remount(info.volume.unlink_dm_node)
