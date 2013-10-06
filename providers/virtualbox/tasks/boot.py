@@ -27,12 +27,14 @@ class ConfigureGrub(Task):
 				if isinstance(p_map, NoPartitions):
 					p_map.root.device_path = info.volume.device_path
 			return set_device_path
+		link_fn = mk_remount_fn(info.volume.link_dm_node)
+		unlink_fn = mk_remount_fn(info.volume.unlink_dm_node)
 
 		# GRUB cannot deal with installing to loopback devices
 		# so we fake a real harddisk with dmsetup.
 		# Guide here: http://ebroder.net/2009/08/04/installing-grub-onto-a-disk-image/
 		if isinstance(info.volume, LoopbackVolume):
-			remount(mk_remount_fn(info.volume.link_dm_node))
+			remount(info.volume, link_fn)
 		try:
 			[device_path] = log_check_call(['readlink', '-f', info.volume.device_path])
 			device_map_path = os.path.join(grub_dir, 'device.map')
@@ -56,8 +58,8 @@ class ConfigureGrub(Task):
 			log_check_call(['/usr/sbin/chroot', info.root, '/usr/sbin/update-grub'])
 		except Exception as e:
 			if isinstance(info.volume, LoopbackVolume):
-				remount(mk_remount_fn(info.volume.unlink_dm_node))
+				remount(info.volume, unlink_fn)
 			raise e
 
 		if isinstance(info.volume, LoopbackVolume):
-			remount(mk_remount_fn(info.volume.unlink_dm_node))
+			remount(info.volume, unlink_fn)
