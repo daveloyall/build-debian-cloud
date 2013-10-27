@@ -52,6 +52,9 @@ either Amazon Web Services or Google Compute Engine.
 Valid subcommands are:
     ec2    Build an Amazon Machine Image
     gce    Build a Google Compute Engine Image
+
+For help on a subcommand use:
+    build-debian-cloud [subcommand] --help
 "
 
 platform=$1
